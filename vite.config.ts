@@ -11,7 +11,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["/vite.svg"],
+      includeAssets: ["vite.svg"],
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
         runtimeCaching: [
@@ -80,16 +80,16 @@ export default defineConfig({
         theme_color: "#3b82f6",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "/",
+        start_url: "/bookstore-map/",
         icons: [
           {
-            src: "/vite.svg",
+            src: "/bookstore-map/vite.svg",
             sizes: "192x192",
             type: "image/svg+xml",
             purpose: "any",
           },
           {
-            src: "/vite.svg",
+            src: "/bookstore-map/vite.svg",
             sizes: "512x512",
             type: "image/svg+xml",
             purpose: "any",
