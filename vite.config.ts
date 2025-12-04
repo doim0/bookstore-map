@@ -11,12 +11,13 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: null, // Disable auto-registration
+      injectRegister: null, // Manual registration in main.tsx
       includeAssets: ["vite.svg"],
       workbox: {
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
+        navigateFallback: null, // Prevent navigation fallback issues with GitHub Pages
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
         runtimeCaching: [
           {

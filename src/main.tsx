@@ -4,22 +4,36 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-// Unregister all service workers to clear cache issues
+// Register service worker for PWA
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      for (const registration of registrations) {
-        await registration.unregister();
-        console.log("Service worker unregistered");
-      }
+      // Register service worker with correct path for GitHub Pages
+      const registration = await navigator.serviceWorker.register(
+        "/bookstore-map/sw.js",
+        { scope: "/bookstore-map/" }
+      );
 
-      // Clear all caches
-      const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map((name) => caches.delete(name)));
-      console.log("All caches cleared");
+      console.log("ServiceWorker registered successfully:", registration.scope);
+
+      // Update on reload
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (newWorker) {
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              console.log(
+                "New service worker available, will update on next visit"
+              );
+            }
+          });
+        }
+      });
     } catch (err) {
-      console.warn("Error clearing service workers/caches:", err);
+      console.warn("ServiceWorker registration failed:", err);
     }
   });
 }
