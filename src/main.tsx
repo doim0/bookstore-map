@@ -4,26 +4,22 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-// Register service worker for PWA (safe: only when supported)
+// Unregister all service workers to clear cache issues
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      // Unregister all existing service workers
       const registrations = await navigator.serviceWorker.getRegistrations();
       for (const registration of registrations) {
         await registration.unregister();
+        console.log("Service worker unregistered");
       }
 
-      // Register new service worker with base path for GitHub Pages
-      const registration = await navigator.serviceWorker.register(
-        "/bookstore-map/sw.js"
-      );
-      console.log(
-        "ServiceWorker registration successful with scope: ",
-        registration.scope
-      );
+      // Clear all caches
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      console.log("All caches cleared");
     } catch (err) {
-      console.warn("ServiceWorker registration failed: ", err);
+      console.warn("Error clearing service workers/caches:", err);
     }
   });
 }
