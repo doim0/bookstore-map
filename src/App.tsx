@@ -8,7 +8,7 @@ import "./i18n";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/bookstore-map">
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <Routes>
