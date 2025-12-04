@@ -6,17 +6,24 @@ createRoot(document.getElementById("root")!).render(<App />);
 
 // Register service worker for PWA (safe: only when supported)
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((registration) => {
-        console.log(
-          "ServiceWorker registration successful with scope: ",
-          registration.scope
-        );
-      })
-      .catch((err) => {
-        console.warn("ServiceWorker registration failed: ", err);
-      });
+  window.addEventListener("load", async () => {
+    try {
+      // Unregister all existing service workers
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        await registration.unregister();
+      }
+
+      // Register new service worker with base path for GitHub Pages
+      const registration = await navigator.serviceWorker.register(
+        "/bookstore-map/sw.js"
+      );
+      console.log(
+        "ServiceWorker registration successful with scope: ",
+        registration.scope
+      );
+    } catch (err) {
+      console.warn("ServiceWorker registration failed: ", err);
+    }
   });
 }
